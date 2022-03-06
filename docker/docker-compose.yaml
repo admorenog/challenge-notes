@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+  web-php8-server:
+    container_name: ${COMPOSE_PROJECT_NAME:-base}_web
+    build:
+      dockerfile: php.Dockerfile
+      context: .
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+    volumes:
+      - "../:/var/www/html"
+      - "./apache/envvars:/etc/apache2/envvars"
+      - "./php/conf.d/log.ini:/usr/local/etc/php/conf.d/log.ini"
+      - "./php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini"
+    ports:
+      - "${APACHE_PUBLIC_PORT:-80}:80"
+    environment:
+      PHP_IDE_CONFIG: ${PHPSTORM_CONFIG:-serverName=localhost}
+    expose:
+      - ${XDEBUG_PUBLIC_PORT:-9003}
+  mysql-server:
+    container_name: ${COMPOSE_PROJECT_NAME:-base}_db
+    image: mysql:8.0.27
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-secret}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "${MYSQL_PUBLIC_PORT:-13306}:3306"
+volumes:
+  mysql-data:
