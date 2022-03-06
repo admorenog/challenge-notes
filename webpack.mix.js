@@ -19,7 +19,12 @@ mix.js('resources/js/app.js', 'public/js')
         require('autoprefixer'),
     ])
     .webpackConfig(require('./webpack.config'));
-
+mix.options({
+    hmrOptions: {
+        host: 'localhost',
+        port: '1080'
+    }
+});
 if (mix.inProduction()) {
     mix.version();
 }
