@@ -1,12 +1,12 @@
-docker exec -it -u app netberry_web sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-docker cp ~/.ssh netberry_web:/var/www/
-docker cp ~/.gitconfig netberry_web:/var/www/
+docker exec -it -u app notes_web sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+docker cp ~/.ssh notes_web:/var/www/
+docker cp ~/.gitconfig notes_web:/var/www/
 
-docker exec -it netberry_db zsh
+docker exec -it notes_db zsh
 mysql -uroot -psecret
 create database db
 
-docker exec -it -u app netberry_web zsh
+docker exec -it -u app notes_web zsh
 composer install
 php artisan migrate
 php artisan db:seed
