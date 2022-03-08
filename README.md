@@ -67,3 +67,9 @@ docker exec -it -u app notes_web zsh
     > php artisan db:seed --class=TaskCategorySeeder
     > npm run prod
 ```
+
+### Tests
+
+```
+php artisan test
+```

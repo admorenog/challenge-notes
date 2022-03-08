@@ -50,7 +50,7 @@ class TaskController extends Controller
         $task->categories()->attach($categories);
         $task->load('categories');
 
-        return response()->json($task);
+        return response()->json($task, 201);
     }
 
     /**
