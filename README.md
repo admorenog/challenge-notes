@@ -48,19 +48,21 @@ work that will not probe my capabilities.
   The opportunity is looking for someone that can write in technical english.
 
 ### Installation
-docker-compose -f docker/docker-compose.yaml up &
+docker-compose -f docker/docker-compose.yaml --project-directory=docker up &
 
 docker exec -it netberry_db bash
     > mysql -p
         > secret
         > create schema notes;
         > exit
+    > exit
 docker exec -it -u app netberry_web zsh
+    > nvm install 16
     > cp .env.example .env
     > composer install
-    > nvm install 16
     > npm i
     > composer dumpauto
     > php artisan optimize
     > php artisan migrate
     > php artisan db:seed --class=TaskCategorySeeder
+    > npm run prod

@@ -7,13 +7,7 @@ RUN echo "set bell-style visible" > ~/.inputrc \
 
 RUN apt update \
 	&& apt -y upgrade \
-	&& apt -y install vim git zip zsh
-
-# nvm to install node 16
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-RUN export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")" && \
-   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-RUN nvm install 16
+	&& apt -y install vim git zip zsh sudo
 
 # PHP config
 RUN pecl install xdebug
@@ -37,9 +31,10 @@ RUN groupadd -g 1000 app \
 
 RUN echo "set bell-style visible" > /home/app/.inputrc
 
+# node 16
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | sudo -u app bash
 RUN echo 'export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"' >> /home/app/.zshrc && \
-   echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm' >> /home/app/.zshrc
-
-RUN ln -s /root/.nvm /home/app/.nvm
+   echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm' >> /home/app/.zshrc && \
+   chown app:app /home/app/.zshrc
 
 WORKDIR /var/www/html
