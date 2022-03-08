@@ -5,10 +5,10 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ExampleTest extends TestCase
+class AppTest extends TestCase
 {
     /**
-     * A basic test example.
+     * Tests that the web responds
      *
      * @return void
      */
