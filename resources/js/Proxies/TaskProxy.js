@@ -8,6 +8,14 @@ export default class TaskProxy {
      */
     constructor(url) {
         this.baseUrl = url;
+        this.requestManager = axios;
+        this.requestManager.interceptors.response.use(null, function (error) {
+            // Here we are ready to check global errors.
+            if(error.status == 422) {
+                this.emitter.emit("error-unprocesable-entity", error.response.data);
+            }
+            return Promise.reject(error);
+        });
     }
 
     /**
@@ -15,7 +23,15 @@ export default class TaskProxy {
      * @returns {Promise<any>}
      */
     async getTasks() {
-        return (await axios.get(`${this.baseUrl}/api/tasks`)).data;
+        return (await this.requestManager.get(`${this.baseUrl}/api/tasks`)).data;
+    }
+
+    /**x
+     * Create a new Task
+     * @returns {Promise<any>}
+     */
+    async newTask(task) {
+        return (await this.requestManager.post(`${this.baseUrl}/api/tasks`, task)).data;
     }
 
     /**
@@ -24,6 +40,14 @@ export default class TaskProxy {
      * @returns {Promise<void>}
      */
     async deleteTask(taskId) {
-        return (await axios.delete(`${this.baseUrl}/api/tasks/${taskId}`)).data
+        return (await this.requestManager.delete(`${this.baseUrl}/api/tasks/${taskId}`)).data
+    }
+
+    /**
+     * List the current categories
+     * @returns {Promise<void>}
+     */
+    async getCategories(taskId) {
+        return (await this.requestManager.get(`${this.baseUrl}/api/categories`)).data
     }
 }

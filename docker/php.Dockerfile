@@ -10,9 +10,10 @@ RUN apt update \
 	&& apt -y install vim git zip zsh
 
 # nvm to install node 16
-#RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash && \
-#    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-#    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+RUN export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")" && \
+   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+RUN nvm install 16
 
 # PHP config
 RUN pecl install xdebug
@@ -33,5 +34,12 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 RUN groupadd -g 1000 app \
 	&& useradd app -g app -u 1000 -m \
 	&& chown -R app:app /var/www
+
+RUN echo "set bell-style visible" > /home/app/.inputrc
+
+RUN echo 'export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"' >> /home/app/.zshrc && \
+   echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm' >> /home/app/.zshrc
+
+RUN ln -s /root/.nvm /home/app/.nvm
 
 WORKDIR /var/www/html

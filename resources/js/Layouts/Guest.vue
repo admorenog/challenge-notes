@@ -3,7 +3,7 @@
         <title>Dashboard</title>
     </head>
     <body>
-        <div class="container-fluid col-md-8 mt-12">
+        <div class="container-fluid col-md-8 mt-5">
             <slot name="header" />
             <slot name="body" />
         </div>

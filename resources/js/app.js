@@ -1,11 +1,9 @@
-import TaskProxy from "@/Proxies/TaskProxy";
-
 require('./bootstrap');
-
 import * as Vue from 'vue';
-import Dashboard from './Pages/Dashboard';
+import mitt from 'mitt';
 
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
+import TaskProxy from "@/Proxies/TaskProxy";
+import Dashboard from '@/Pages/Dashboard';
 
 const taskProxy = new TaskProxy('http://localhost:1080');
 
@@ -14,5 +12,6 @@ const app = Vue.createApp({});
 app.component("dashboard", Dashboard);
 
 app.config.globalProperties.taskProxy = taskProxy;
+app.config.globalProperties.emitter = mitt();
 
 app.mount('#app');

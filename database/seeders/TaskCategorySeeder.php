@@ -19,9 +19,11 @@ class TaskCategorySeeder extends Seeder
 
         $tasks = Task::factory(3)->create();
 
-        foreach($tasks as $task) {
-            $task->categories()->sync($categories);
-        }
+        $countOfRandomCategories = 0;
 
+        foreach($tasks as $task) {
+            $randomCategories = $categories->random($countOfRandomCategories++);
+            $task->categories()->sync($randomCategories);
+        }
     }
 }

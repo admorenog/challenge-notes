@@ -1,0 +1,4 @@
+{
+    "The :attribute must not be greater than :max characters." : "El campo :attribute no debe ser mayor de :max caracteres.",
+    "The :attribute must be at least :min characters." : "El campo :attribute debe tener al menos :min caracteres."
+}

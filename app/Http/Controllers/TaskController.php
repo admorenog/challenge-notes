@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\Category;
 use App\Models\Task;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -40,30 +41,16 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        //
-    }
+        $task = Task::create([
+            'name' => $request->name
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param Task $task
-     * @return Response
-     */
-    public function show(Task $task)
-    {
-        //
-    }
+        $categories = Category::whereIn('id', $request->categories)->get();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdateTaskRequest $request
-     * @param Task $task
-     * @return Response
-     */
-    public function update(UpdateTaskRequest $request, Task $task)
-    {
-        //
+        $task->categories()->attach($categories);
+        $task->load('categories');
+
+        return response()->json($task);
     }
 
     /**
@@ -74,6 +61,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task->delete();
+        return response()->json(Task::getWithCategories());
     }
 }
